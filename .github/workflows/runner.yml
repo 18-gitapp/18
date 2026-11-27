@@ -1,0 +1,74 @@
+name: Linux Runner
+
+on:
+  workflow_dispatch:
+  # اگه خواستی زنجیره‌ی پاره‌شده خودش دوباره بالا بیاد، این دو خط رو فعال کن:
+  # schedule:
+  #   - cron: "0 */6 * * *"
+
+permissions:
+  contents: write
+  actions: write
+
+# فقط یک نمونه همزمان؛ اجرای بعدی تا تموم شدن این یکی صبر می‌کنه
+concurrency:
+  group: linux-runner
+  cancel-in-progress: false
+
+env:
+  # طول شیفت (دقیقه): Variable یا Secret با نام RUN_MINUTES (فقط موقع شروع اجرا خونده میشه)
+  RUN_MINUTES: ${{ vars.RUN_MINUTES || secrets.RUN_MINUTES || '320' }}
+  FG_TIMEOUT: "3600"      # حداکثر زمان هر اسکریپت در linux/start (ثانیه)
+  END_TIMEOUT: "600"      # حداکثر زمان هر اسکریپت در linux/end و linux/final
+  GH_TIMEOUT: "900"       # حداکثر زمان هر اسکریپت در github/*
+  # سکرت‌هایی که به فاز لینوکس داده نمیشن (برنامه‌های روی لینوکس نباید توکن زنجیره رو ببینن). خالی = همه رو بده
+  LINUX_HIDE_SECRETS: "GH_TOKEN NEXT_REPO"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      - name: Mark start time
+        run: echo "JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+
+      # ── دستورهای «رانر گیت‌هاب» (مثل مراحل yml) ──
+      - name: github/pre
+        env:
+          ALL_SECRETS: ${{ toJSON(secrets) }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash runner/run-dir.sh github/pre
+
+      # ── دستورهای «خود لینوکس» (مثل SSH): start → services → end → final ──
+      - name: linux (start → services → end → final)
+        env:
+          ALL_SECRETS: ${{ toJSON(secrets) }}
+        run: bash runner/linux.sh
+
+      - name: github/post
+        if: ${{ !cancelled() }}
+        env:
+          ALL_SECRETS: ${{ toJSON(secrets) }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash runner/run-dir.sh github/post
+
+      - name: github/always
+        if: ${{ always() }}
+        env:
+          ALL_SECRETS: ${{ toJSON(secrets) }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash runner/run-dir.sh github/always
+
+      - name: Upload logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-${{ github.run_number }}
+          path: /tmp/run-logs
+          retention-days: 3
+          if-no-files-found: ignore
