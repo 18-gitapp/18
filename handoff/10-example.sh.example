@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-# نمونه — پسوند .example رو بردار تا اجرا بشه.
-gh variable set RUN_MINUTES --body 300 --repo "$NEXT_REPO"
-# اگه MY_API_KEY از قبل سکرت همین ریپو بوده، خودکار منتقل میشه؛ این برای وقتیه که می‌خوای مقدار دیگه‌ای بدی:
-# gh secret set MY_API_KEY --body "${MY_API_KEY}-v2" --repo "$NEXT_REPO"

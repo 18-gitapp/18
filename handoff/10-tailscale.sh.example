@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-# موقع هر تحویل، سکرت‌های Tailscale رو روی ریپوی بعدی ست می‌کنه (برای تأکید؛ خود موتور هم همه‌ی سکرت‌ها رو منتقل می‌کنه).
-# gh با GH_TOKEN لاگینه و $NEXT_REPO ریپوی بعدیه.
-for k in TS_OAUTH_SECRET TS_AUTHKEY TAILSCALE_AUTHKEY TS_TAGS TS_HOSTNAME; do
-  v="${!k:-}"
-  [ -z "$v" ] && continue
-  if printf '%s' "$v" | gh secret set "$k" --repo "$NEXT_REPO" >/dev/null 2>&1; then echo "✅ $k → $NEXT_REPO"; else echo "⚠️ $k ست نشد"; fi
-done
