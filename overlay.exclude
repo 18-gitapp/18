@@ -1,0 +1,11 @@
+# عبارت regex (هر خط یکی)؛ مسیرهای منطبق منتقل نمیشن. {HOME} = هوم کاربر
+^/home/[^/]+/(work|runners|_work|\.cache|\.npm/_cacache|\.local/share/Trash)(/|$)
+^{HOME}/(work|runners|_work|\.cache|\.npm/_cacache|\.local/share/Trash)(/|$)
+^/opt/hostedtoolcache
+^/root/\.cache
+/__pycache__(/|$)
+\.pyc$
+\.log$
+^/usr/local/bin/handoff-set$
+^{HOME}/next-repo(/|$)
+^/usr/local/bin/announce$

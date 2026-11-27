@@ -1,0 +1,15 @@
+# هر تغییری (فایل جدید یا ویرایش‌شده) که داخل این مسیرها در طول شیفت اتفاق بیفته، خودکار به اکانت بعدی منتقل میشه.
+# (نصب پکیج‌های apt جداگانه و خودکار ثبت میشه.)
+$RUNNER_HOME
+/home                     # شامل هوم همه‌ی کاربرها (کاربر runner و ...)
+/opt
+/usr/local
+/root
+/srv
+# ریپوها و کلیدهای apt (مثلاً ریپوی VS Code) تا نصب پکیج‌های سوم‌شخص روی ماشین بعدی هم کار کنه
+/etc/apt/sources.list.d
+/etc/apt/keyrings
+/etc/apt/trusted.gpg.d
+/etc/apt/preferences.d
+/usr/share/keyrings
+# اگه فایل دستی‌ای توی /etc تغییر میدی (مثلاً /etc/xrdp)، مسیرش رو به backup.paths اضافه کن.
