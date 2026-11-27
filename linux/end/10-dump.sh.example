@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-# نمونه‌ی «آخر شیفت، سرویس‌ها هنوز روشن‌اند»: دامپ دیتابیس داخل $DATA_DIR (که بکاپ میشه).
-# pg_dump mydb > "$DATA_DIR/mydb.sql"
-echo "dump نمونه"
