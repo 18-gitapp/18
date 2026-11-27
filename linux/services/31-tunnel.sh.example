@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# تونل https رایگان (Cloudflare quick tunnel) به یک پورت لوکال، مثلاً code-server یا noVNC.
+# لینک https://....trycloudflare.com رو از لاگ زنده‌ی job بردار. هر شیفت لینک جدیده.
+# برای پورت دیگه (مثلاً noVNC روی 6080): سکرت یا متغیر TUNNEL_PORT رو عوض کن.
+PORT="${TUNNEL_PORT:-8080}"
+if ! command -v cloudflared >/dev/null; then
+  curl -fsSL -o /tmp/cf.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+  sudo dpkg -i /tmp/cf.deb >/dev/null
+fi
+exec cloudflared tunnel --no-autoupdate --url "http://127.0.0.1:$PORT"

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# نمونه‌ی اسکریپت نصب (idempotent). هرچی دستی روی ماشین نصب کنی هم خودکار منتقل میشه؛ این برای کارهاییه که می‌خوای «هر شیفت حتماً» اجرا بشن.
+sudo apt-get install -y -qq htop git
+# سکرت‌های ریپو متغیرن:  git clone "https://x-access-token:${MY_PAT}@github.com/USER/REPO.git" "$HOME/app" || git -C "$HOME/app" pull

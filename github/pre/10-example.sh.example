@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# نمونه‌ی مرحله‌ی «قبل از لینوکس» روی رانر گیت‌هاب (مثل یک step در yml).
+echo "repo: $GITHUB_REPOSITORY | run: ${GITHUB_RUN_ID:-?}"
